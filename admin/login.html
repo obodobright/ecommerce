@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Ecommerce Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-shop"></i> Ecommerce Store - Admin
+            </a>
+        </div>
+    </nav>
+
+    <!-- Admin Login Form -->
+    <div class="container">
+        <div class="form-container">
+            <h2 class="text-center mb-4">
+                <i class="bi bi-shield-lock"></i> Admin Login
+            </h2>
+            <form id="adminLoginForm">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email Address</label>
+                    <input type="email" class="form-control" id="email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" required>
+                </div>
+                <div class="alert alert-danger" id="errorAlert" style="display: none;"></div>
+                <button type="submit" class="btn btn-primary w-100 mb-3">Login</button>
+                <p class="text-center">
+                    <a href="../user/login.html">User Login</a> | 
+                    <a href="../index.html">Back to Store</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script>
+        document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorAlert = document.getElementById('errorAlert');
+            const submitBtn = this.querySelector('button[type="submit"]');
+            
+            // Disable button and show loading
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Logging in...';
+            errorAlert.style.display = 'none';
+            
+            try {
+                const response = await api.auth.login(email, password);
+                
+                if (response.user.role !== 'admin') {
+                    throw new Error('Admin access required');
+                }
+                
+                // Redirect to admin dashboard
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                errorAlert.textContent = error.message || 'Invalid admin credentials!';
+                errorAlert.style.display = 'block';
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Login';
+            }
+        });
+    </script>
+</body>
+</html>
+

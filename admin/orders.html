@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Orders - Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-shop"></i> Admin Panel
+            </a>
+            <div class="ms-auto">
+                <span class="navbar-text me-3" id="adminName"></span>
+                <a class="btn btn-outline-light btn-sm" href="../index.html">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div class="col-md-2 admin-sidebar">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <a class="nav-link" href="dashboard.html">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="products.html">
+                            <i class="bi bi-box-seam"></i> Products
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="orders.html">
+                            <i class="bi bi-cart-check"></i> Orders
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Main Content -->
+            <div class="col-md-10 admin-content">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2>Manage Orders</h2>
+                    <div>
+                        <select class="form-select d-inline-block" id="statusFilter" style="width: auto;" onchange="loadOrders()">
+                            <option value="">All Status</option>
+                            <option value="pending">Pending</option>
+                            <option value="processing">Processing</option>
+                            <option value="shipped">Shipped</option>
+                            <option value="delivered">Delivered</option>
+                            <option value="cancelled">Cancelled</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Orders Table -->
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Items</th>
+                                        <th>Date</th>
+                                        <th>Total</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTable">
+                                    <!-- Orders will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Order Details Modal -->
+    <div class="modal fade" id="orderModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Order Details #<span id="orderModalId"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="orderModalBody">
+                    <!-- Order details will be loaded here -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        async function loadOrders() {
+            const user = api.getCurrentUser();
+            
+            if (!user || user.role !== 'admin' || !api.getAuthToken()) {
+                window.location.href = 'login.html';
+                return;
+            }
+            
+            document.getElementById('adminName').textContent = user.fullName || user.email;
+            
+            try {
+                const statusFilter = document.getElementById('statusFilter').value;
+                const orders = await api.admin.getOrders(statusFilter || null);
+                
+                const tableBody = document.getElementById('ordersTable');
+                
+                // Check for orderId in URL
+                const urlParams = new URLSearchParams(window.location.search);
+                const orderId = urlParams.get('orderId');
+                
+                if (orders.length === 0) {
+                    tableBody.innerHTML = '<tr><td colspan="7" class="text-center">No orders found</td></tr>';
+                } else {
+                    tableBody.innerHTML = orders.map(order => {
+                        const statusClass = {
+                            'pending': 'warning',
+                            'processing': 'info',
+                            'shipped': 'primary',
+                            'delivered': 'success',
+                            'cancelled': 'danger'
+                        }[order.status] || 'secondary';
+                        
+                        const totalItems = order.items.reduce((sum, item) => sum + item.quantity, 0);
+                        
+                        return `
+                            <tr>
+                                <td>#${order.id}</td>
+                                <td>${order.shipping_name || order.customer_name || 'N/A'}<br><small class="text-muted">${order.shipping_email || order.customer_email || ''}</small></td>
+                                <td>${totalItems} item(s)</td>
+                                <td>${new Date(order.created_at).toLocaleString()}</td>
+                                <td>${formatPrice(order.total)}</td>
+                                <td>
+                                    <select class="form-select form-select-sm" onchange="updateOrderStatus(${order.id}, this.value)">
+                                        <option value="pending" ${order.status === 'pending' ? 'selected' : ''}>Pending</option>
+                                        <option value="processing" ${order.status === 'processing' ? 'selected' : ''}>Processing</option>
+                                        <option value="shipped" ${order.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+                                        <option value="delivered" ${order.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+                                        <option value="cancelled" ${order.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" onclick="viewOrderDetails(${order.id})">
+                                        <i class="bi bi-eye"></i> View
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('');
+                    
+                    // Auto-open modal if orderId in URL
+                    if (orderId) {
+                        setTimeout(() => viewOrderDetails(parseInt(orderId)), 100);
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading orders:', error);
+                alert('Error loading orders. Please try again.');
+            }
+        }
+        
+        async function viewOrderDetails(orderId) {
+            try {
+                const order = await api.admin.getOrder(orderId);
+                
+                document.getElementById('orderModalId').textContent = order.id;
+                
+                const modalBody = document.getElementById('orderModalBody');
+                modalBody.innerHTML = `
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <h6>Order Information</h6>
+                            <p><strong>Order ID:</strong> #${order.id}</p>
+                            <p><strong>Date:</strong> ${new Date(order.created_at).toLocaleString()}</p>
+                            <p><strong>Status:</strong> <span class="badge bg-${order.status === 'pending' ? 'warning' : order.status === 'delivered' ? 'success' : 'info'}">${order.status}</span></p>
+                            <p><strong>Payment Method:</strong> ${order.payment_method === 'cod' ? 'Cash on Delivery' : 'Credit/Debit Card'}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Shipping Address</h6>
+                            <p>
+                                ${order.shipping_name}<br>
+                                ${order.shipping_address}<br>
+                                ${order.shipping_city}, ${order.shipping_state} ${order.shipping_zip}<br>
+                                Phone: ${order.shipping_phone}<br>
+                                Email: ${order.shipping_email}
+                            </p>
+                        </div>
+                    </div>
+                    <hr>
+                    <h6>Order Items</h6>
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${order.items.map(item => `
+                                <tr>
+                                    <td>${item.productName}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${formatPrice(item.price)}</td>
+                                    <td>${formatPrice(item.price * item.quantity)}</td>
+                                </tr>
+                            `).join('')}
+                        </tbody>
+                    </table>
+                    <hr>
+                    <div class="d-flex justify-content-end">
+                        <div style="width: 300px;">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Subtotal:</span>
+                                <span>${formatPrice(order.subtotal)}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span>Tax:</span>
+                                <span>${formatPrice(order.tax)}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <strong>Total:</strong>
+                                <strong>${formatPrice(order.total)}</strong>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                const modal = new bootstrap.Modal(document.getElementById('orderModal'));
+                modal.show();
+            } catch (error) {
+                alert('Error loading order details');
+            }
+        }
+        
+        async function updateOrderStatus(orderId, newStatus) {
+            try {
+                await api.admin.updateOrderStatus(orderId, newStatus);
+                await loadOrders();
+            } catch (error) {
+                alert(error.message || 'Failed to update order status');
+                await loadOrders();
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', loadOrders);
+    </script>
+</body>
+</html>
+

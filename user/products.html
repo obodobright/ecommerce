@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Ecommerce Store</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">
+                <i class="bi bi-shop"></i> Ecommerce Store
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="../index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="products.html">Products</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="cart.html">
+                            <i class="bi bi-cart"></i> Cart <span class="badge bg-danger cart-count">0</span>
+                        </a>
+                    </li>
+                    <li class="nav-item" id="authNav"></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search and Filter Section -->
+    <div class="container mt-4">
+        <div class="search-filter-section">
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label for="searchInput" class="form-label">Search Products</label>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search by name...">
+                </div>
+                <div class="col-md-3">
+                    <label for="categoryFilter" class="form-label">Category</label>
+                    <select class="form-select" id="categoryFilter">
+                        <option value="">All Categories</option>
+                        <option value="mens">mens</option>
+                        <option value="womens">womens</option>
+                        <option value="kids">kids</option>
+                        <option value="footwear">footwear</option>
+                        <option value="accessories">accessories</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="sortFilter" class="form-label">Sort By</label>
+                    <select class="form-select" id="sortFilter">
+                        <option value="name">Name (A-Z)</option>
+                        <option value="price-low">Price (Low to High)</option>
+                        <option value="price-high">Price (High to Low)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Grid -->
+        <div class="row g-4 mt-2" id="productsGrid">
+            <!-- Products will be loaded here -->
+        </div>
+
+        <div class="alert alert-info mt-4" id="noProductsAlert" style="display: none;">
+            No products found matching your criteria.
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center">
+            <p>&copy; 2025 Ecommerce Store. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+        let allProducts = [];
+        
+        async function loadProducts() {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const category = urlParams.get('category');
+                
+                const filters = {
+                    category: category || document.getElementById('categoryFilter').value || null,
+                    search: document.getElementById('searchInput').value || null,
+                    sortBy: document.getElementById('sortFilter').value || 'name'
+                };
+                
+                allProducts = await api.products.getAll(filters);
+                displayProducts(allProducts);
+                
+                if (category) {
+                    document.getElementById('categoryFilter').value = category;
+                }
+            } catch (error) {
+                console.error('Error loading products:', error);
+                document.getElementById('productsGrid').innerHTML = 
+                    '<div class="col-12"><div class="alert alert-danger">Error loading products. Please try again.</div></div>';
+            }
+        }
+        
+        function displayProducts(products) {
+            const grid = document.getElementById('productsGrid');
+            const noProductsAlert = document.getElementById('noProductsAlert');
+            
+            if (products.length === 0) {
+                grid.innerHTML = '';
+                noProductsAlert.style.display = 'block';
+                return;
+            }
+            
+            noProductsAlert.style.display = 'none';
+            grid.innerHTML = products.map(product => {
+                const stockStatus = getStockStatus(product.stock);
+                return `
+                    <div class="col-md-4 col-lg-3">
+                        <div class="card product-card">
+                            <img src="${product.image || 'https://via.placeholder.com/300x300'}" class="card-img-top product-image" alt="${product.name}">
+                            <div class="card-body">
+                                <h5 class="card-title">${product.name}</h5>
+                                <p class="card-text text-muted small">${product.description || ''}</p>
+                                <p class="product-price">${formatPrice(product.price)}</p>
+                                <p class="product-stock ${stockStatus.class}">${stockStatus.text}</p>
+                                <button class="btn btn-primary w-100 add-to-cart-btn" 
+                                        data-product-id="${product.id}" 
+                                        ${product.stock === 0 ? 'disabled' : ''}>
+                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Add event listeners to add to cart buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', async function() {
+                    const productId = parseInt(this.getAttribute('data-product-id'));
+                    const user = api.getCurrentUser();
+                    
+                    if (!user || !api.getAuthToken()) {
+                        if (confirm('You need to login to add items to cart. Redirect to login?')) {
+                            window.location.href = 'login.html';
+                        }
+                        return;
+                    }
+                    
+                    try {
+                        await api.cart.add(productId, 1);
+                        
+                        // Show feedback
+                        const originalText = this.innerHTML;
+                        this.innerHTML = '<i class="bi bi-check"></i> Added!';
+                        this.classList.remove('btn-primary');
+                        this.classList.add('btn-success');
+                        this.disabled = true;
+                        
+                        // Update cart count
+                        updateCartCount();
+                        
+                        setTimeout(() => {
+                            this.innerHTML = originalText;
+                            this.classList.remove('btn-success');
+                            this.classList.add('btn-primary');
+                            this.disabled = false;
+                        }, 1000);
+                    } catch (error) {
+                        alert(error.message || 'Failed to add item to cart');
+                    }
+                });
+            });
+        }
+        
+        function updateCartCount() {
+            api.cart.get().then(cart => {
+                const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(el => {
+                    el.textContent = totalItems;
+                    el.style.display = totalItems > 0 ? 'inline' : 'none';
+                });
+            }).catch(() => {
+                // User not logged in
+            });
+        }
+
+     function renderAuthNav() {
+        const authNav = document.getElementById("authNav");
+
+        const user = api.getCurrentUser();
+        const token = api.getAuthToken();
+
+        if (!user || !token) {
+            authNav.innerHTML = `
+                <a class="nav-link" href="user/login.html">Login</a>
+            `;
+        } else {
+            authNav.innerHTML = `
+                <div class="dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        <i class="bi bi-person-circle"></i> ${user.fullName || user.username}
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        
+                        <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Logout</a></li>
+                    </ul>
+                </div>
+            `;
+
+            setTimeout(() => {
+                const logoutBtn = document.getElementById("logoutBtn");
+                if (logoutBtn) {
+                    logoutBtn.addEventListener("click", () => {
+                        api.auth.logout();
+                        window.location.reload();
+                    });
+                }
+            }, 50);
+        }
+}
+        
+        // Event listeners
+        document.getElementById('searchInput').addEventListener('input', loadProducts);
+        document.getElementById('categoryFilter').addEventListener('change', loadProducts);
+        document.getElementById('sortFilter').addEventListener('change', loadProducts);
+        
+        // Load products on page load
+        document.addEventListener("DOMContentLoaded", renderAuthNav);
+
+        document.addEventListener('DOMContentLoaded', loadProducts);
+    </script>
+</body>
+</html>
+
