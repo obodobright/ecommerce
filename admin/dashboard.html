@@ -1,208 +1,213 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Dashboard - Ecommerce Store</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+  </head>
+  <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../index.html">
-                <i class="bi bi-shop"></i> Admin Panel
-            </a>
-            <div class="ms-auto">
-                <span class="navbar-text me-3" id="adminName"></span>
-                <a class="btn btn-outline-light btn-sm" href="../index.html">
-                    <i class="bi bi-box-arrow-right"></i> Logout
-                </a>
-            </div>
+      <div class="container-fluid">
+        <a class="navbar-brand" href="../index.html">
+          <i class="bi bi-shop"></i> Ecommerce Admin
+        </a>
+        <div class="ms-auto">
+          <span class="navbar-text me-3" id="adminName"></span>
+          <a class="btn btn-outline-light btn-sm" href="../index.html">
+            <i class="bi bi-box-arrow-right"></i> Logout
+          </a>
         </div>
+      </div>
     </nav>
 
     <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <div class="col-md-2 admin-sidebar">
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="dashboard.html">
-                            <i class="bi bi-speedometer2"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="products.html">
-                            <i class="bi bi-box-seam"></i> Products
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="orders.html">
-                            <i class="bi bi-cart-check"></i> Orders
-                        </a>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Main Content -->
-            <div class="col-md-10 admin-content">
-                <h2 class="mb-4">Dashboard Overview</h2>
-                
-                <!-- Stats Cards -->
-                <div class="row g-4 mb-4">
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-muted mb-2">Total Products</h6>
-                                        <h3 id="totalProducts">0</h3>
-                                    </div>
-                                    <i class="bi bi-box-seam stats-icon text-primary"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-muted mb-2">Total Orders</h6>
-                                        <h3 id="totalOrders">0</h3>
-                                    </div>
-                                    <i class="bi bi-cart-check stats-icon text-success"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-muted mb-2">Pending Orders</h6>
-                                        <h3 id="pendingOrders">0</h3>
-                                    </div>
-                                    <i class="bi bi-clock-history stats-icon text-warning"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-3">
-                        <div class="card stats-card">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="text-muted mb-2">Total Revenue</h6>
-                                        <h3 id="totalRevenue">$0</h3>
-                                    </div>
-                                    <i class="bi bi-currency-dollar stats-icon text-info"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Recent Orders -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5>Recent Orders</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>Order ID</th>
-                                        <th>Customer</th>
-                                        <th>Date</th>
-                                        <th>Total</th>
-                                        <th>Status</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="recentOrdersTable">
-                                    <!-- Recent orders will be loaded here -->
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="text-center mt-3">
-                            <a href="orders.html" class="btn btn-primary">View All Orders</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+      <div class="row">
+        <!-- Sidebar -->
+        <div class="col-md-2 admin-sidebar">
+          <ul class="nav flex-column">
+            <li class="nav-item">
+              <a class="nav-link active" href="dashboard.html">
+                <i class="bi bi-speedometer2"></i> Dashboard
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html"> <i class="bi bi-box-seam"></i> Products </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="orders.html"> <i class="bi bi-cart-check"></i> Orders </a>
+            </li>
+          </ul>
         </div>
+
+        <!-- Main Content -->
+        <div class="col-md-10 admin-content">
+          <h2 class="mb-4">Dashboard Overview</h2>
+
+          <div class="row g-4 mb-4">
+            <div class="col-md-3">
+              <div class="card stats-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="text-muted mb-2">Total Products</h6>
+                      <h3 id="totalProducts">0</h3>
+                    </div>
+                    <i class="bi bi-box-seam stats-icon text-primary"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card stats-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="text-muted mb-2">Total Orders</h6>
+                      <h3 id="totalOrders">0</h3>
+                    </div>
+                    <i class="bi bi-cart-check stats-icon text-success"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card stats-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="text-muted mb-2">Pending Orders</h6>
+                      <h3 id="pendingOrders">0</h3>
+                    </div>
+                    <i class="bi bi-clock-history stats-icon text-warning"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card stats-card">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="text-muted mb-2">Total Revenue</h6>
+                      <h3 id="totalRevenue">$0</h3>
+                    </div>
+                    <i class="bi bi-currency-dollar stats-icon text-info"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--This is the recent order div -->
+          <div class="card">
+            <div class="card-header">
+              <h5>Recent Orders</h5>
+            </div>
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>Customer</th>
+                      <th>Date</th>
+                      <th>Total</th>
+                      <th>Status</th>
+                      <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody id="recentOrdersTable">
+                    <!-- table to show all recent orders  -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="text-center mt-3">
+                <a href="orders.html" class="btn btn-primary">View All Orders</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/main.js"></script>
     <script>
-        async function loadDashboard() {
-            const user = api.getCurrentUser();
-            
-            if (!user || user.role !== 'admin' || !api.getAuthToken()) {
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            document.getElementById('adminName').textContent = user.fullName || user.email;
-            
-            try {
-                // Load statistics
-                const stats = await api.admin.getDashboard();
-                
-                document.getElementById('totalProducts').textContent = stats.totalProducts;
-                document.getElementById('totalOrders').textContent = stats.totalOrders;
-                document.getElementById('pendingOrders').textContent = stats.pendingOrders;
-                document.getElementById('totalRevenue').textContent = formatPrice(stats.totalRevenue);
-                
-                // Load recent orders
-                const orders = await api.admin.getOrders();
-                const recentOrders = orders.slice(-5).reverse();
-                const tableBody = document.getElementById('recentOrdersTable');
-                
-                if (recentOrders.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No orders yet</td></tr>';
-                } else {
-                    tableBody.innerHTML = recentOrders.map(order => {
-                        const statusClass = {
-                            'pending': 'warning',
-                            'processing': 'info',
-                            'shipped': 'primary',
-                            'delivered': 'success',
-                            'cancelled': 'danger'
-                        }[order.status] || 'secondary';
-                        
-                        return `
+      async function loadDashboard() {
+        const user = api.getCurrentUser();
+
+        if (!user || user.role !== "admin" || !api.getAuthToken()) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        document.getElementById("adminName").textContent = user.fullName || user.email;
+
+        try {
+          const stats = await api.admin.getDashboard();
+
+          document.getElementById("totalProducts").textContent = stats.totalProducts;
+          document.getElementById("totalOrders").textContent = stats.totalOrders;
+          document.getElementById("pendingOrders").textContent = stats.pendingOrders;
+          document.getElementById("totalRevenue").textContent = formatPrice(stats.totalRevenue);
+
+          const orders = await api.admin.getOrders();
+          const recentOrders = orders.slice(-5).reverse();
+          const tableBody = document.getElementById("recentOrdersTable");
+
+          if (recentOrders.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="6" class="text-center">No orders yet</td></tr>';
+          } else {
+            tableBody.innerHTML = recentOrders
+              .map((order) => {
+                const statusClass =
+                  {
+                    pending: "warning",
+                    processing: "info",
+                    shipped: "primary",
+                    delivered: "success",
+                    cancelled: "danger",
+                  }[order.status] || "secondary";
+
+                return `
                             <tr>
                                 <td>#${order.id}</td>
-                                <td>${order.shipping_name || order.customer_name || 'N/A'}</td>
+                                <td>${order.shipping_name || order.customer_name || "N/A"}</td>
                                 <td>${new Date(order.created_at).toLocaleDateString()}</td>
                                 <td>${formatPrice(order.total)}</td>
-                                <td><span class="badge bg-${statusClass}">${order.status}</span></td>
+                                <td><span class="badge bg-${statusClass}">${
+                  order.status
+                }</span></td>
                                 <td>
-                                    <a href="orders.html?orderId=${order.id}" class="btn btn-sm btn-outline-primary">
+                                    <a href="orders.html?orderId=${
+                                      order.id
+                                    }" class="btn btn-sm btn-outline-primary">
                                         View
                                     </a>
                                 </td>
                             </tr>
                         `;
-                    }).join('');
-                }
-            } catch (error) {
-                console.error('Error loading dashboard:', error);
-                alert('Error loading dashboard. Please try again.');
-            }
+              })
+              .join("");
+          }
+        } catch (error) {
+          console.error("Error loading dashboard:", error);
+          alert("Error loading dashboard. Please try again.");
         }
-        
-        document.addEventListener('DOMContentLoaded', loadDashboard);
-    </script>
-</body>
-</html>
+      }
 
+      document.addEventListener("DOMContentLoaded", loadDashboard);
+    </script>
+  </body>
+</html>
