@@ -1,111 +1,236 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Ecommerce Store</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping Cart - Deo Essentials</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <!-- Page-specific modern styling to match landing page -->
+    <style>
+      :root {
+        --deo-gradient: linear-gradient(135deg, #ff6cab 0%, #7366ff 50%, #38c6ff 100%);
+        --deo-dark: #050816;
+        --deo-soft: #f5f3ff;
+        --deo-pill-bg: rgba(255, 255, 255, 0.12);
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background:
+          radial-gradient(circle at top left, #ffe6f3 0, transparent 45%),
+          radial-gradient(circle at bottom right, #e0f3ff 0, transparent 45%), #ffffff;
+      }
+
+      .navbar {
+        backdrop-filter: blur(18px);
+        background: rgba(5, 8, 22, 0.9) !important;
+      }
+
+      .navbar-brand {
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .navbar-brand span {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--deo-pill-bg);
+        font-size: 0.75rem;
+        margin-left: 8px;
+      }
+
+      main {
+        flex: 1;
+        padding: 3rem 0 3.5rem;
+      }
+
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(79, 70, 229, 0.08);
+        color: #4338ca;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 0.6rem;
+      }
+
+      .section-title {
+        font-weight: 700;
+        letter-spacing: -0.04em;
+      }
+
+      .cart-item {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        padding: 1.2rem 1.1rem;
+        margin-bottom: 1rem;
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+      }
+
+      .cart-summary {
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 22px;
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        padding: 1.6rem 1.4rem;
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+      }
+
+      .btn-checkout {
+        background: var(--deo-gradient);
+        border: none;
+        font-weight: 600;
+      }
+
+      .btn-checkout:hover {
+        filter: brightness(1.05);
+      }
+
+      footer {
+        background: #020617 !important;
+      }
+    </style>
+  </head>
+  <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="../index.html">
-                <i class="bi bi-shop"></i> Ecommerce Store
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="products.html">Products</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="cart.html">
-                            <i class="bi bi-cart"></i> Cart <span class="badge bg-danger cart-count">0</span>
-                        </a>
-                    </li>
-                    <li class="nav-item" id="authNav"></li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="bi bi-shop"></i> Deo Essentials
+          <span>AI ready</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="cart.html">
+                <i class="bi bi-cart"></i> Cart <span class="badge bg-danger cart-count">0</span>
+              </a>
+            </li>
+            <li class="nav-item" id="authNav"></li>
+          </ul>
         </div>
+      </div>
     </nav>
 
-    <!-- Cart Content -->
-    <div class="container mt-4 mb-5">
-        <h2 class="mb-4"><i class="bi bi-cart"></i> Shopping Cart</h2>
-        
-        <div class="row">
-            <div class="col-lg-8">
-                <div id="cartItems">
-                    <!-- Cart items will be loaded here -->
-                </div>
-                <div class="alert alert-info" id="emptyCartAlert" style="display: none;">
-                    <i class="bi bi-cart-x"></i> Your cart is empty. <a href="products.html">Continue Shopping</a>
-                </div>
+    <main>
+      <div class="container">
+        <div
+          class="d-flex flex-column flex-md-row align-items-md-end justify-content-between mt-3 mb-4"
+        >
+          <div>
+            <div class="section-label">
+              <i class="bi bi-bag-check"></i>
+              Your bag
             </div>
-            
-            <div class="col-lg-4">
-                <div class="cart-summary">
-                    <h4>Order Summary</h4>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span id="subtotal">$0.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tax (10%):</span>
-                        <span id="tax">$0.00</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <span>Shipping:</span>
-                        <span>Free</span>
-                    </div>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-3">
-                        <strong>Total:</strong>
-                        <strong id="total">$0.00</strong>
-                    </div>
-                    <button class="btn btn-primary w-100" id="checkoutBtn" disabled>
-                        <i class="bi bi-credit-card"></i> Proceed to Checkout
-                    </button>
-                    <a href="products.html" class="btn btn-outline-secondary w-100 mt-2">
-                        <i class="bi bi-arrow-left"></i> Continue Shopping
-                    </a>
-                </div>
-            </div>
+            <h1 class="section-title h3 mb-1">Review your Deo Essentials cart</h1>
+            <p class="text-muted mb-0" style="font-size: 0.9rem">
+              Adjust quantities, remove items, and checkout when it feels right.
+            </p>
+          </div>
         </div>
-    </div>
+
+        <div class="row">
+          <div class="col-lg-8 mb-4 mb-lg-0">
+            <div id="cartItems">
+              <!-- Cart items will be loaded here -->
+            </div>
+            <div class="alert alert-info mt-2" id="emptyCartAlert" style="display: none">
+              <i class="bi bi-cart-x"></i> Your cart is empty.
+              <a href="products.html">Continue shopping</a>
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="cart-summary">
+              <h4 class="mb-2">Order summary</h4>
+              <p class="text-muted mb-3" style="font-size: 0.85rem">
+                Shipping is free on all orders. Taxes are estimated and updated at checkout.
+              </p>
+              <hr />
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <span id="subtotal">£0.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Tax (10%):</span>
+                <span id="tax">£0.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-3">
+                <span>Shipping:</span>
+                <span>Free</span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between mb-3">
+                <strong>Total:</strong>
+                <strong id="total">£0.00</strong>
+              </div>
+              <button class="btn btn-checkout w-100 mb-2" id="checkoutBtn" disabled>
+                <i class="bi bi-credit-card me-1"></i> Proceed to checkout
+              </button>
+              <a href="products.html" class="btn btn-outline-secondary w-100">
+                <i class="bi bi-arrow-left"></i> Continue shopping
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container text-center">
-            <p>&copy; 2024 Ecommerce Store. All rights reserved.</p>
-        </div>
+    <footer class="bg-dark text-light py-3 mt-4">
+      <div class="container text-center">
+        <p class="mb-0" style="font-size: 0.8rem; opacity: 0.85">
+          &copy; 2026 Deo Essentials. All rights reserved.
+        </p>
+      </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/main.js"></script>
     <script>
-        function renderAuthNav() {
-    const authNav = document.getElementById("authNav");
+      function renderAuthNav() {
+        const authNav = document.getElementById("authNav");
 
-    const user = api.getCurrentUser();
-    const token = api.getAuthToken();
+        const user = api.getCurrentUser();
+        const token = api.getAuthToken();
 
-    if (!user || !token) {
-        authNav.innerHTML = `
+        if (!user || !token) {
+          authNav.innerHTML = `
             <a class="nav-link" href="user/login.html">Login</a>
         `;
-    } else {
-        authNav.innerHTML = `
+        } else {
+          authNav.innerHTML = `
             <div class="dropdown">
                 <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
                     <i class="bi bi-person-circle"></i> ${user.fullName || user.username}
@@ -117,50 +242,51 @@
             </div>
         `;
 
-        setTimeout(() => {
+          setTimeout(() => {
             const logoutBtn = document.getElementById("logoutBtn");
             if (logoutBtn) {
-                logoutBtn.addEventListener("click", () => {
-                    api.auth.logout();
-                    window.location.reload();
-                });
+              logoutBtn.addEventListener("click", () => {
+                api.auth.logout();
+                window.location.reload();
+              });
             }
-        }, 50);
-    }
-}
-        async function loadCart() {
-            const user = api.getCurrentUser();
-            if (!user || !api.getAuthToken()) {
-                window.location.href = 'login.html';
-                return;
-            }
-            
-            try {
-                const cart = await api.cart.get();
-                const cartItemsDiv = document.getElementById('cartItems');
-                const emptyCartAlert = document.getElementById('emptyCartAlert');
-                
-                if (cart.length === 0) {
-                    cartItemsDiv.innerHTML = '';
-                    emptyCartAlert.style.display = 'block';
-                    document.getElementById('checkoutBtn').disabled = true;
-                    updateSummary(0);
-                    return;
-                }
-                
-                emptyCartAlert.style.display = 'none';
-                document.getElementById('checkoutBtn').disabled = false;
-                
-                let total = 0;
-                cartItemsDiv.innerHTML = cart.map(item => {
-                    const itemTotal = item.price * item.quantity;
-                    total += itemTotal;
-                    
-                    return `
+          }, 50);
+        }
+      }
+      async function loadCart() {
+        const user = api.getCurrentUser();
+        if (!user || !api.getAuthToken()) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        try {
+          const cart = await api.cart.get();
+          const cartItemsDiv = document.getElementById("cartItems");
+          const emptyCartAlert = document.getElementById("emptyCartAlert");
+
+          if (cart.length === 0) {
+            cartItemsDiv.innerHTML = "";
+            emptyCartAlert.style.display = "block";
+            document.getElementById("checkoutBtn").disabled = true;
+            updateSummary(0);
+            return;
+          }
+
+          emptyCartAlert.style.display = "none";
+          document.getElementById("checkoutBtn").disabled = false;
+
+          let total = 0;
+          cartItemsDiv.innerHTML = cart
+            .map((item) => {
+              const itemTotal = item.price * item.quantity;
+              total += itemTotal;
+
+              return `
                         <div class="cart-item">
                             <div class="row align-items-center">
                                 <div class="col-md-2">
-                                    <img src="${item.image || 'https://via.placeholder.com/300x300'}" class="img-fluid rounded" alt="${item.name}">
+                                    <img src="${item.image || "https://via.placeholder.com/300x300"}" class="img-fluid rounded" alt="${item.name}">
                                 </div>
                                 <div class="col-md-4">
                                     <h5>${item.name}</h5>
@@ -189,62 +315,62 @@
                             </div>
                         </div>
                     `;
-                }).join('');
-                
-                updateSummary(total);
-            } catch (error) {
-                console.error('Error loading cart:', error);
-                document.getElementById('cartItems').innerHTML = 
-                    '<div class="alert alert-danger">Error loading cart. Please try again.</div>';
-            }
-        }
-        
-        async function updateQuantity(cartItemId, quantity) {
-            if (quantity < 1) {
-                if (confirm('Remove this item from cart?')) {
-                    await removeItem(cartItemId);
-                }
-                return;
-            }
-            
-            try {
-                await api.cart.update(cartItemId, quantity);
-                await loadCart();
-            } catch (error) {
-                alert(error.message || 'Failed to update quantity');
-                await loadCart();
-            }
-        }
-        
-        async function removeItem(cartItemId) {
-            if (!confirm('Remove this item from cart?')) {
-                return;
-            }
-            
-            try {
-                await api.cart.remove(cartItemId);
-                await loadCart();
-            } catch (error) {
-                alert(error.message || 'Failed to remove item');
-            }
-        }
-        
-        function updateSummary(subtotal) {
-            const tax = subtotal * 0.1;
-            const total = subtotal + tax;
-            
-            document.getElementById('subtotal').textContent = formatPrice(subtotal);
-            document.getElementById('tax').textContent = formatPrice(tax);
-            document.getElementById('total').textContent = formatPrice(total);
-        }
-        
-        document.getElementById('checkoutBtn').addEventListener('click', function() {
-            window.location.href = 'checkout.html';
-        });
-        document.addEventListener("DOMContentLoaded", renderAuthNav);
+            })
+            .join("");
 
-        document.addEventListener('DOMContentLoaded', loadCart);
+          updateSummary(total);
+        } catch (error) {
+          console.error("Error loading cart:", error);
+          document.getElementById("cartItems").innerHTML =
+            '<div class="alert alert-danger">Error loading cart. Please try again.</div>';
+        }
+      }
+
+      async function updateQuantity(cartItemId, quantity) {
+        if (quantity < 1) {
+          if (confirm("Remove this item from cart?")) {
+            await removeItem(cartItemId);
+          }
+          return;
+        }
+
+        try {
+          await api.cart.update(cartItemId, quantity);
+          await loadCart();
+        } catch (error) {
+          alert(error.message || "Failed to update quantity");
+          await loadCart();
+        }
+      }
+
+      async function removeItem(cartItemId) {
+        if (!confirm("Remove this item from cart?")) {
+          return;
+        }
+
+        try {
+          await api.cart.remove(cartItemId);
+          await loadCart();
+        } catch (error) {
+          alert(error.message || "Failed to remove item");
+        }
+      }
+
+      function updateSummary(subtotal) {
+        const tax = subtotal * 0.1;
+        const total = subtotal + tax;
+
+        document.getElementById("subtotal").textContent = formatPrice(subtotal);
+        document.getElementById("tax").textContent = formatPrice(tax);
+        document.getElementById("total").textContent = formatPrice(total);
+      }
+
+      document.getElementById("checkoutBtn").addEventListener("click", function () {
+        window.location.href = "checkout.html";
+      });
+      document.addEventListener("DOMContentLoaded", renderAuthNav);
+
+      document.addEventListener("DOMContentLoaded", loadCart);
     </script>
-</body>
+  </body>
 </html>
-

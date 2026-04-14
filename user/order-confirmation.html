@@ -1,134 +1,350 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmation - Ecommerce Store</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="../css/style.css">
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Order Confirmed - Deo Essentials</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <style>
+      :root {
+        --deo-gradient: linear-gradient(135deg, #ff6cab 0%, #7366ff 50%, #38c6ff 100%);
+        --deo-dark: #050816;
+        --deo-soft: #f5f3ff;
+        --deo-pill-bg: rgba(255, 255, 255, 0.12);
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background:
+          radial-gradient(circle at top left, #ffe6f3 0, transparent 45%),
+          radial-gradient(circle at bottom right, #e0f3ff 0, transparent 45%), #ffffff;
+      }
+
+      .navbar {
+        backdrop-filter: blur(18px);
+        background: rgba(5, 8, 22, 0.9) !important;
+      }
+
+      .navbar-brand {
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .navbar-brand span {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--deo-pill-bg);
+        font-size: 0.75rem;
+        margin-left: 8px;
+      }
+
+      main {
+        flex: 1;
+        padding: 3rem 0 4rem;
+      }
+
+      .success-icon-wrap {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--deo-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 12px 35px rgba(115, 102, 255, 0.35);
+      }
+
+      .success-icon-wrap i {
+        font-size: 2.4rem;
+        color: #fff;
+      }
+
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(79, 70, 229, 0.08);
+        color: #4338ca;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 0.6rem;
+      }
+
+      .confirmation-card {
+        border-radius: 22px;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08);
+        overflow: hidden;
+        max-width: 640px;
+        margin: 0 auto;
+      }
+
+      .confirmation-card-header {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #1e293b;
+        background: rgba(248, 250, 252, 0.8);
+      }
+
+      .confirmation-card-body {
+        padding: 1.5rem;
+      }
+
+      .order-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 0;
+        font-size: 0.9rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+      }
+
+      .order-item-row:last-child {
+        border-bottom: none;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        font-size: 0.9rem;
+        margin-bottom: 0.4rem;
+      }
+
+      .btn-continue {
+        background: var(--deo-gradient);
+        border: none;
+        font-weight: 600;
+        color: #fff;
+        padding: 0.6rem 1.6rem;
+      }
+
+      .btn-continue:hover {
+        filter: brightness(1.06);
+        color: #fff;
+      }
+
+      footer {
+        background: #020617 !important;
+      }
+    </style>
+  </head>
+  <body>
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-        <div class="container">
-            <a class="navbar-brand" href="../index.html">
-                <i class="bi bi-shop"></i> Ecommerce Store
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="../index.html">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="products.html">Products</a>
-                    </li>
-                </ul>
-            </div>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html">
+          <i class="bi bi-shop"></i> Deo Essentials
+          <span>AI ready</span>
+        </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">Products</a>
+            </li>
+            <li class="nav-item" id="authNav"></li>
+          </ul>
         </div>
+      </div>
     </nav>
 
-    <!-- Order Confirmation -->
-    <div class="container">
-        <div class="order-confirmation">
-            <i class="bi bi-check-circle-fill"></i>
-            <h2 class="mb-3">Order Confirmed!</h2>
-            <p class="lead mb-4">Thank you for your purchase. Your order has been received and is being processed.</p>
-            
-            <div class="card mx-auto" style="max-width: 600px;">
-                <div class="card-body">
-                    <h5 class="card-title mb-4">Order Details</h5>
-                    <div id="orderDetails">
-                        <!-- Order details will be loaded here -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-4">
-                <a href="products.html" class="btn btn-primary btn-lg me-2">
-                   Continue Shopping
-                </a>
-                <a href="../index.html" class="btn btn-outline-secondary btn-lg">
-                     Back to Home
-                </a>
-            </div>
+    <main>
+      <div class="container">
+        <!-- Success hero -->
+        <div class="text-center mb-4 mt-2">
+          <div class="success-icon-wrap">
+            <i class="bi bi-check-lg"></i>
+          </div>
+          <div class="section-label mx-auto" style="width: fit-content">
+            <i class="bi bi-bag-check"></i>
+            Order placed
+          </div>
+          <h1 class="fw-bold mb-2" style="letter-spacing: -0.04em">Your order is confirmed!</h1>
+          <p class="text-muted" style="font-size: 0.95rem; max-width: 440px; margin: 0 auto">
+            Thank you for shopping with Deo Essentials. We're getting your order ready.
+          </p>
         </div>
-    </div>
+
+        <!-- Order details card -->
+        <div class="confirmation-card mb-4">
+          <div class="confirmation-card-header">
+            <i class="bi bi-receipt"></i> Order Details
+          </div>
+          <div class="confirmation-card-body" id="orderDetails">
+            <!-- Loaded by JS -->
+          </div>
+        </div>
+
+        <!-- Action buttons -->
+        <div class="text-center d-flex justify-content-center gap-3 flex-wrap">
+          <a href="products.html" class="btn btn-continue btn-lg">
+            <i class="bi bi-bag me-1"></i> Continue Shopping
+          </a>
+          <a href="../index.html" class="btn btn-outline-secondary btn-lg">
+            <i class="bi bi-house me-1"></i> Back to Home
+          </a>
+        </div>
+      </div>
+    </main>
 
     <!-- Footer -->
-    <footer class="bg-dark text-light py-4 mt-5">
-        <div class="container text-center">
-            <p>&copy; 2025 Ecommerce Store. All rights reserved.</p>
-        </div>
+    <footer class="bg-dark text-light py-3 mt-4">
+      <div class="container text-center">
+        <p class="mb-0" style="font-size: 0.8rem; opacity: 0.85">
+          &copy; 2026 Deo Essentials. All rights reserved.
+        </p>
+      </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="../js/api.js"></script>
     <script src="../js/main.js"></script>
     <script>
-        async function loadOrderConfirmation() {
-            const urlParams = new URLSearchParams(window.location.search);
-            const orderId = parseInt(urlParams.get('orderId'));
-            
-            if (!orderId) {
-                alert('Invalid order!');
-                window.location.href = 'products.html';
-                return;
-            }
-            
-            try {
-                const order = await api.orders.getById(orderId);
-                
-                const orderDetailsDiv = document.getElementById('orderDetails');
-                orderDetailsDiv.innerHTML = `
-                    <p><strong>Order ID:</strong> #${order.id}</p>
-                    <p><strong>Order Date:</strong> ${new Date(order.created_at).toLocaleString()}</p>
-                    <hr>
-                    <h6>Items:</h6>
-                    <ul class="list-unstyled">
-                        ${order.items.map(item => `
-                            <li class="mb-2">
-                                ${item.productName} x${item.quantity} - ${formatPrice(item.price * item.quantity)}
-                            </li>
-                        `).join('')}
-                    </ul>
-                    <hr>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Subtotal:</span>
-                        <span>${formatPrice(order.subtotal)}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-2">
-                        <span>Tax:</span>
-                        <span>${formatPrice(order.tax)}</span>
-                    </div>
-                    <div class="d-flex justify-content-between mb-3">
-                        <strong>Total:</strong>
-                        <strong>${formatPrice(order.total)}</strong>
-                    </div>
-                    <hr>
-                    <h6>Shipping Address:</h6>
-                    <p class="mb-0">
-                        ${order.shipping_name}<br>
-                        ${order.shipping_address}<br>
-                        ${order.shipping_city}, ${order.shipping_state} ${order.shipping_zip}<br>
-                        Phone: ${order.shipping_phone}
-                    </p>
-                    <hr>
-                    <p><strong>Payment Method:</strong> ${order.payment_method === 'cod' ? 'Cash on Delivery' : 'Credit/Debit Card'}</p>
-                    <p><strong>Status:</strong> <span class="badge bg-warning">${order.status}</span></p>
-                `;
-            } catch (error) {
-                console.error('Error loading order:', error);
-                alert('Order not found!');
-                window.location.href = 'products.html';
-            }
-        }
-        
-        document.addEventListener('DOMContentLoaded', loadOrderConfirmation);
-    </script>
-</body>
-</html>
+      function renderAuthNav() {
+        const authNav = document.getElementById("authNav");
+        const user = api.getCurrentUser();
+        const token = api.getAuthToken();
 
+        if (!user || !token) {
+          authNav.innerHTML = `<a class="nav-link" href="login.html">Login</a>`;
+        } else {
+          authNav.innerHTML = `
+            <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle"></i> ${user.fullName || user.username}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Logout</a></li>
+              </ul>
+            </div>`;
+          setTimeout(() => {
+            const logoutBtn = document.getElementById("logoutBtn");
+            if (logoutBtn) {
+              logoutBtn.addEventListener("click", () => {
+                api.auth.logout();
+                window.location.reload();
+              });
+            }
+          }, 50);
+        }
+      }
+
+      async function loadOrderConfirmation() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = parseInt(urlParams.get("orderId"));
+
+        if (!orderId) {
+          alert("Invalid order!");
+          window.location.href = "products.html";
+          return;
+        }
+
+        try {
+          const order = await api.orders.getById(orderId);
+          const orderDetailsDiv = document.getElementById("orderDetails");
+
+          const itemsHtml = order.items
+            .map(
+              (item) => `
+              <div class="order-item-row">
+                <span class="text-muted">${item.productName} <span class="fw-semibold text-dark">×${item.quantity}</span></span>
+                <span class="fw-semibold">${formatPrice(item.price * item.quantity)}</span>
+              </div>`
+            )
+            .join("");
+
+          orderDetailsDiv.innerHTML = `
+            <div class="detail-row mb-3">
+              <span class="text-muted">Order ID</span>
+              <span class="fw-semibold">#${order.id}</span>
+            </div>
+            <div class="detail-row mb-3">
+              <span class="text-muted">Order Date</span>
+              <span>${new Date(order.created_at).toLocaleString()}</span>
+            </div>
+            <div class="detail-row mb-3">
+              <span class="text-muted">Status</span>
+              <span><span class="badge bg-warning text-dark">${order.status}</span></span>
+            </div>
+            <div class="detail-row mb-3">
+              <span class="text-muted">Payment</span>
+              <span>${order.payment_method === "cod" ? "Cash on Delivery" : "Credit / Debit Card"}</span>
+            </div>
+
+            <hr style="border-color: rgba(148,163,184,0.25);" />
+
+            <p class="fw-semibold mb-2" style="font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b;">Items ordered</p>
+            <div class="mb-3">${itemsHtml}</div>
+
+            <hr style="border-color: rgba(148,163,184,0.25);" />
+
+            <div class="detail-row">
+              <span class="text-muted">Subtotal</span>
+              <span>${formatPrice(order.subtotal)}</span>
+            </div>
+            <div class="detail-row">
+              <span class="text-muted">Tax (10%)</span>
+              <span>${formatPrice(order.tax)}</span>
+            </div>
+            <div class="detail-row">
+              <span class="text-muted">Shipping</span>
+              <span class="text-success fw-semibold">Free</span>
+            </div>
+            <div class="detail-row mt-2">
+              <strong>Total</strong>
+              <strong>${formatPrice(order.total)}</strong>
+            </div>
+
+            <hr style="border-color: rgba(148,163,184,0.25);" />
+
+            <p class="fw-semibold mb-2" style="font-size: 0.88rem; text-transform: uppercase; letter-spacing: 0.08em; color: #64748b;">Shipping to</p>
+            <p class="mb-0 text-muted" style="font-size: 0.9rem; line-height: 1.7">
+              ${order.shipping_name}<br>
+              ${order.shipping_address}<br>
+              ${order.shipping_city}, ${order.shipping_state} ${order.shipping_zip}<br>
+              <i class="bi bi-telephone me-1"></i>${order.shipping_phone}
+            </p>`;
+        } catch (error) {
+          console.error("Error loading order:", error);
+          alert("Order not found!");
+          window.location.href = "products.html";
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", renderAuthNav);
+      document.addEventListener("DOMContentLoaded", loadOrderConfirmation);
+    </script>
+  </body>
+</html>

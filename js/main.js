@@ -137,7 +137,7 @@ function saveOrder(order) {
 
 // Utility Functions
 function formatPrice(price) {
-    return `$${parseFloat(price).toFixed(2)}`;
+    return `£${parseFloat(price).toFixed(2)}`;
 }
 
 function getStockStatus(stock) {
