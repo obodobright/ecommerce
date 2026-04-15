@@ -1,18 +1,21 @@
 # Ecommerce System - Full Stack Application
 
-A complete ecommerce system with Node.js backend and MySQL database, featuring user and admin modules.
+A complete ecommerce system with Node.js backend and MySQL database, featuring user and admin
+modules.
 
 ## Features
 
 ### User Module
+
 - User registration and authentication
 - Browse products by category
-- Search and filter products
+- Filter products
 - Shopping cart management
 - Checkout process
 - Order confirmation
 
 ### Admin Module
+
 - Admin authentication
 - Dashboard with statistics
 - Product management (CRUD)
@@ -36,11 +39,13 @@ A complete ecommerce system with Node.js backend and MySQL database, featuring u
 ## Installation
 
 1. **Clone the repository**
+
    ```bash
    cd ecommerce-assignment
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -59,9 +64,11 @@ A complete ecommerce system with Node.js backend and MySQL database, featuring u
      ```
 
 4. **Initialize the database**
+
    ```bash
    npm run init-db
    ```
+
    This will:
    - Create the database if it doesn't exist
    - Create all necessary tables
@@ -69,10 +76,13 @@ A complete ecommerce system with Node.js backend and MySQL database, featuring u
    - Create default admin user
 
 5. **Start the server**
+
    ```bash
    npm start
    ```
+
    For development with auto-reload:
+
    ```bash
    npm run dev
    ```
@@ -89,11 +99,13 @@ A complete ecommerce system with Node.js backend and MySQL database, featuring u
 ## API Endpoints
 
 ### Authentication
+
 - `POST /api/auth/register` - Register new user
 - `POST /api/auth/login` - User login
 - `GET /api/auth/me` - Get current user (requires auth)
 
 ### Products
+
 - `GET /api/products` - Get all products (with optional filters: category, search, sortBy)
 - `GET /api/products/:id` - Get single product
 - `POST /api/products` - Create product (admin only)
@@ -101,6 +113,7 @@ A complete ecommerce system with Node.js backend and MySQL database, featuring u
 - `DELETE /api/products/:id` - Delete product (admin only)
 
 ### Cart
+
 - `GET /api/cart` - Get user's cart (requires auth)
 - `POST /api/cart/add` - Add item to cart (requires auth)
 - `PUT /api/cart/:id` - Update cart item quantity (requires auth)
@@ -108,11 +121,13 @@ A complete ecommerce system with Node.js backend and MySQL database, featuring u
 - `DELETE /api/cart` - Clear cart (requires auth)
 
 ### Orders
+
 - `GET /api/orders` - Get user's orders (requires auth)
 - `GET /api/orders/:id` - Get single order (requires auth)
 - `POST /api/orders` - Create new order (requires auth)
 
 ### Admin
+
 - `GET /api/admin/dashboard` - Get dashboard statistics (admin only)
 - `GET /api/admin/orders` - Get all orders (admin only)
 - `GET /api/admin/orders/:id` - Get single order (admin only)
@@ -121,6 +136,7 @@ A complete ecommerce system with Node.js backend and MySQL database, featuring u
 ## Database Schema
 
 ### Tables
+
 - `users` - User accounts
 - `products` - Product catalog
 - `cart` - Shopping cart items
@@ -158,6 +174,7 @@ ecommerce-assignment/
 ## Development
 
 The application uses:
+
 - **Express.js** for the REST API
 - **MySQL2** with connection pooling
 - **JWT** for stateless authentication
@@ -182,6 +199,5 @@ The application uses:
 ## License
 
 ISC
-
 
 USE DOCKER

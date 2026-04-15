@@ -1,0 +1,592 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Orders - Deo Essentials</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="../css/style.css" />
+
+    <style>
+      :root {
+        --deo-gradient: linear-gradient(135deg, #ff6cab 0%, #7366ff 50%, #38c6ff 100%);
+        --deo-dark: #050816;
+        --deo-soft: #f5f3ff;
+        --deo-pill-bg: rgba(255, 255, 255, 0.12);
+      }
+
+      body {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background:
+          radial-gradient(circle at top left, #ffe6f3 0, transparent 45%),
+          radial-gradient(circle at bottom right, #e0f3ff 0, transparent 45%), #ffffff;
+      }
+
+      .navbar {
+        backdrop-filter: blur(18px);
+        background: rgba(5, 8, 22, 0.9) !important;
+      }
+
+      .navbar-brand {
+        font-weight: 800;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+      }
+
+      .navbar-brand span {
+        padding: 4px 10px;
+        border-radius: 999px;
+        background: var(--deo-pill-bg);
+        font-size: 0.75rem;
+        margin-left: 8px;
+      }
+
+      main {
+        flex: 1;
+        padding: 3rem 0 3.5rem;
+      }
+
+      .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+        background: rgba(79, 70, 229, 0.08);
+        color: #4338ca;
+        font-size: 0.75rem;
+        text-transform: uppercase;
+        letter-spacing: 0.12em;
+        margin-bottom: 0.6rem;
+      }
+
+      .section-title {
+        font-weight: 700;
+        letter-spacing: -0.04em;
+      }
+
+      .order-card {
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(148, 163, 184, 0.35);
+        box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
+        overflow: hidden;
+        margin-bottom: 1.1rem;
+        transition: box-shadow 0.18s ease;
+      }
+
+      .order-card:hover {
+        box-shadow: 0 20px 48px rgba(15, 23, 42, 0.12);
+      }
+
+      .order-card-header {
+        padding: 1.1rem 1.4rem;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .order-card-header:hover {
+        background: rgba(248, 250, 252, 0.8);
+      }
+
+      .order-card-body {
+        border-top: 1px solid rgba(148, 163, 184, 0.2);
+        padding: 1.2rem 1.4rem;
+        background: rgba(248, 250, 252, 0.5);
+      }
+
+      /* Status badges */
+      .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 0.28rem 0.75rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        text-transform: capitalize;
+      }
+
+      .status-pending {
+        background: #fef9c3;
+        color: #854d0e;
+      }
+      .status-processing {
+        background: #dbeafe;
+        color: #1d4ed8;
+      }
+      .status-shipped {
+        background: #ede9fe;
+        color: #6d28d9;
+      }
+      .status-delivered {
+        background: #dcfce7;
+        color: #15803d;
+      }
+      .status-cancelled {
+        background: #fee2e2;
+        color: #b91c1c;
+      }
+
+      .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        display: inline-block;
+      }
+
+      .status-pending .status-dot {
+        background: #ca8a04;
+      }
+      .status-processing .status-dot {
+        background: #2563eb;
+      }
+      .status-shipped .status-dot {
+        background: #7c3aed;
+      }
+      .status-delivered .status-dot {
+        background: #16a34a;
+      }
+      .status-cancelled .status-dot {
+        background: #dc2626;
+      }
+
+      .order-item-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.45rem 0;
+        font-size: 0.88rem;
+        border-bottom: 1px solid rgba(148, 163, 184, 0.14);
+      }
+
+      .order-item-row:last-child {
+        border-bottom: none;
+      }
+
+      .toggle-icon {
+        transition: transform 0.2s ease;
+      }
+
+      .toggle-icon.open {
+        transform: rotate(180deg);
+      }
+
+      .delivery-progress {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        margin-bottom: 1.1rem;
+      }
+
+      .progress-step {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        position: relative;
+      }
+
+      .progress-step:not(:last-child)::after {
+        content: "";
+        position: absolute;
+        top: 13px;
+        left: 50%;
+        width: 100%;
+        height: 2px;
+        background: #e2e8f0;
+        z-index: 0;
+      }
+
+      .progress-step.done:not(:last-child)::after {
+        background: #16a34a;
+      }
+
+      .step-dot {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 2px solid #e2e8f0;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.7rem;
+        z-index: 1;
+        color: #94a3b8;
+      }
+
+      .progress-step.done .step-dot {
+        background: #16a34a;
+        border-color: #16a34a;
+        color: #fff;
+      }
+
+      .progress-step.active .step-dot {
+        border-color: #7366ff;
+        color: #7366ff;
+        box-shadow: 0 0 0 3px rgba(115, 102, 255, 0.15);
+      }
+
+      .progress-step.cancelled .step-dot {
+        border-color: #dc2626;
+        color: #dc2626;
+      }
+
+      .step-label {
+        font-size: 0.68rem;
+        color: #94a3b8;
+        margin-top: 5px;
+        text-align: center;
+      }
+
+      .progress-step.done .step-label,
+      .progress-step.active .step-label {
+        color: #1e293b;
+        font-weight: 600;
+      }
+
+      footer {
+        background: #020617 !important;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+      <div class="container">
+        <a class="navbar-brand" href="../index.html"> <i class="bi bi-shop"></i> Deo Essentials </a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="../index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="products.html">Products</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="cart.html">
+                <i class="bi bi-cart"></i> Cart
+                <span class="badge bg-danger cart-count" style="display: none">0</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="orders.html">
+                <i class="bi bi-bag-check"></i> My Orders
+              </a>
+            </li>
+            <li class="nav-item" id="authNav"></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container">
+        <div class="mt-3 mb-4">
+          <div class="section-label">
+            <i class="bi bi-bag-check"></i>
+            Order history
+          </div>
+          <h1 class="section-title h3 mb-1">My Orders</h1>
+          <p class="text-muted mb-0" style="font-size: 0.9rem">
+            Track the status of your past and active orders.
+          </p>
+        </div>
+
+        <!-- Filter tabs -->
+        <div class="d-flex gap-2 flex-wrap mb-4" id="filterTabs">
+          <button class="btn btn-sm btn-dark active-tab" data-filter="all">All</button>
+          <button class="btn btn-sm btn-outline-secondary" data-filter="pending">Pending</button>
+          <button class="btn btn-sm btn-outline-secondary" data-filter="processing">
+            Processing
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" data-filter="shipped">Shipped</button>
+          <button class="btn btn-sm btn-outline-secondary" data-filter="delivered">
+            Delivered
+          </button>
+          <button class="btn btn-sm btn-outline-secondary" data-filter="cancelled">
+            Cancelled
+          </button>
+        </div>
+
+        <!-- Orders list -->
+        <div id="ordersList"></div>
+
+        <!-- Empty state -->
+        <div id="emptyState" style="display: none" class="text-center py-5">
+          <div style="font-size: 3rem; opacity: 0.25; margin-bottom: 1rem">
+            <i class="bi bi-bag-x"></i>
+          </div>
+          <p class="text-muted mb-3">No orders found.</p>
+          <a href="products.html" class="btn btn-dark">
+            <i class="bi bi-bag me-1"></i> Start Shopping
+          </a>
+        </div>
+
+        <!-- Loading state -->
+        <div id="loadingState" class="text-center py-5">
+          <div class="spinner-border text-secondary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-3 mt-4">
+      <div class="container text-center">
+        <p class="mb-0" style="font-size: 0.8rem; opacity: 0.85">
+          &copy; 2026 Deo Essentials. All rights reserved.
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/main.js"></script>
+    <script>
+      const STATUS_ORDER = ["pending", "processing", "shipped", "delivered"];
+
+      const STATUS_ICONS = {
+        pending: "bi-clock",
+        processing: "bi-gear",
+        shipped: "bi-truck",
+        delivered: "bi-check-circle-fill",
+        cancelled: "bi-x-circle",
+      };
+
+      const STATUS_STEP_ICONS = {
+        pending: "bi-clock-fill",
+        processing: "bi-gear-fill",
+        shipped: "bi-truck",
+        delivered: "bi-check-lg",
+      };
+
+      let allOrders = [];
+      let currentFilter = "all";
+
+      function renderAuthNav() {
+        const authNav = document.getElementById("authNav");
+        const user = api.getCurrentUser();
+        const token = api.getAuthToken();
+
+        if (!user || !token) {
+          authNav.innerHTML = `<a class="nav-link" href="login.html">Login</a>`;
+        } else {
+          authNav.innerHTML = `
+            <div class="dropdown">
+              <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                <i class="bi bi-person-circle"></i> ${user.fullName || user.username}
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item text-danger" href="#" id="logoutBtn">Logout</a></li>
+              </ul>
+            </div>`;
+          setTimeout(() => {
+            const logoutBtn = document.getElementById("logoutBtn");
+            if (logoutBtn) {
+              logoutBtn.addEventListener("click", () => {
+                api.auth.logout();
+                window.location.href = "login.html";
+              });
+            }
+          }, 50);
+        }
+      }
+
+      function buildProgressBar(status) {
+        if (status === "cancelled") {
+          return `<div class="d-flex align-items-center gap-2 mb-3 text-danger" style="font-size:0.85rem">
+            <i class="bi bi-x-circle-fill"></i> This order was cancelled.
+          </div>`;
+        }
+
+        const currentIdx = STATUS_ORDER.indexOf(status);
+        return `
+          <div class="delivery-progress">
+            ${STATUS_ORDER.map((s, i) => {
+              const done = i < currentIdx;
+              const active = i === currentIdx;
+              const cls = done ? "done" : active ? "active" : "";
+              return `
+                <div class="progress-step ${cls}">
+                  <div class="step-dot"><i class="bi ${STATUS_STEP_ICONS[s]}"></i></div>
+                  <span class="step-label">${s.charAt(0).toUpperCase() + s.slice(1)}</span>
+                </div>`;
+            }).join("")}
+          </div>`;
+      }
+
+      function buildOrderCard(order, index) {
+        const statusClass = `status-${order.status}`;
+        const icon = STATUS_ICONS[order.status] || "bi-circle";
+        const date = new Date(order.created_at).toLocaleDateString("en-GB", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        });
+        const itemCount = order.items.length;
+        const firstItem = order.items[0];
+        const preview = firstItem
+          ? `${firstItem.productName}${itemCount > 1 ? ` + ${itemCount - 1} more` : ""}`
+          : "No items";
+
+        const itemsHtml = order.items
+          .map(
+            (item) => `
+          <div class="order-item-row">
+            <span class="text-muted">${item.productName} <span class="fw-semibold text-dark">×${item.quantity}</span></span>
+            <span class="fw-semibold">${formatPrice(item.price * item.quantity)}</span>
+          </div>`,
+          )
+          .join("");
+
+        const paymentLabel =
+          order.payment_method === "cod" ? "Cash on Delivery" : "Credit / Debit Card";
+
+        return `
+          <div class="order-card" data-status="${order.status}">
+            <div class="order-card-header d-flex align-items-center justify-content-between gap-3"
+                 onclick="toggleCard(this)">
+              <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div>
+                  <div class="fw-bold" style="font-size:0.95rem">Order #${order.id}</div>
+                  <div class="text-muted" style="font-size:0.8rem">${date} &middot; ${preview}</div>
+                </div>
+              </div>
+              <div class="d-flex align-items-center gap-3">
+                <span class="status-badge ${statusClass}">
+                  <span class="status-dot"></span>
+                  <i class="bi ${icon}"></i> ${order.status}
+                </span>
+                <span class="fw-bold" style="font-size:0.95rem">${formatPrice(order.total)}</span>
+                <i class="bi bi-chevron-down toggle-icon text-muted"></i>
+              </div>
+            </div>
+
+            <div class="order-card-body" style="display:none">
+              ${buildProgressBar(order.status)}
+
+              <div class="row g-4">
+                <div class="col-md-7">
+                  <p class="fw-semibold mb-2" style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:#64748b">Items</p>
+                  ${itemsHtml}
+                  <div class="d-flex justify-content-between mt-2" style="font-size:0.85rem">
+                    <span class="text-muted">Subtotal</span><span>${formatPrice(order.subtotal)}</span>
+                  </div>
+                  <div class="d-flex justify-content-between" style="font-size:0.85rem">
+                    <span class="text-muted">Tax (10%)</span><span>${formatPrice(order.tax)}</span>
+                  </div>
+                  <div class="d-flex justify-content-between" style="font-size:0.85rem">
+                    <span class="text-muted">Shipping</span><span class="text-success fw-semibold">Free</span>
+                  </div>
+                  <div class="d-flex justify-content-between mt-1 fw-bold">
+                    <span>Total</span><span>${formatPrice(order.total)}</span>
+                  </div>
+                </div>
+
+                <div class="col-md-5">
+                  <p class="fw-semibold mb-2" style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.08em;color:#64748b">Shipping to</p>
+                  <p class="text-muted mb-3" style="font-size:0.85rem;line-height:1.7">
+                    ${order.shipping_name}<br>
+                    ${order.shipping_address}<br>
+                    ${order.shipping_city}, ${order.shipping_state} ${order.shipping_zip}<br>
+                    <i class="bi bi-telephone me-1"></i>${order.shipping_phone}
+                  </p>
+                  <p class="mb-0" style="font-size:0.85rem">
+                    <span class="text-muted">Payment:</span> ${paymentLabel}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>`;
+      }
+
+      function toggleCard(header) {
+        const body = header.nextElementSibling;
+        const icon = header.querySelector(".toggle-icon");
+        const isOpen = body.style.display !== "none";
+        body.style.display = isOpen ? "none" : "block";
+        icon.classList.toggle("open", !isOpen);
+      }
+
+      function renderOrders(orders) {
+        const list = document.getElementById("ordersList");
+        const empty = document.getElementById("emptyState");
+        const loading = document.getElementById("loadingState");
+
+        loading.style.display = "none";
+
+        if (orders.length === 0) {
+          list.innerHTML = "";
+          empty.style.display = "block";
+          return;
+        }
+
+        empty.style.display = "none";
+        list.innerHTML = orders.map((o, i) => buildOrderCard(o, i)).join("");
+      }
+
+      function applyFilter(filter) {
+        currentFilter = filter;
+
+        // Update tab styles
+        document.querySelectorAll("#filterTabs button").forEach((btn) => {
+          const isActive = btn.dataset.filter === filter;
+          btn.className = isActive
+            ? "btn btn-sm btn-dark active-tab"
+            : "btn btn-sm btn-outline-secondary";
+        });
+
+        const filtered =
+          filter === "all" ? allOrders : allOrders.filter((o) => o.status === filter);
+
+        renderOrders(filtered);
+      }
+
+      async function loadOrders() {
+        const user = api.getCurrentUser();
+        if (!user || !api.getAuthToken()) {
+          window.location.href = "login.html";
+          return;
+        }
+
+        try {
+          allOrders = await api.orders.getAll();
+          applyFilter(currentFilter);
+        } catch (error) {
+          console.error("Error loading orders:", error);
+          document.getElementById("loadingState").style.display = "none";
+          document.getElementById("ordersList").innerHTML =
+            '<div class="alert alert-danger">Failed to load orders. Please try again.</div>';
+        }
+      }
+
+      // Filter tab clicks
+      document.querySelectorAll("#filterTabs button").forEach((btn) => {
+        btn.addEventListener("click", () => applyFilter(btn.dataset.filter));
+      });
+
+      document.addEventListener("DOMContentLoaded", renderAuthNav);
+      document.addEventListener("DOMContentLoaded", loadOrders);
+    </script>
+  </body>
+</html>
