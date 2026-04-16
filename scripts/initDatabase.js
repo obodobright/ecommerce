@@ -6,7 +6,7 @@ const dbConfig = {
   user: process.env.DB_USER || "root",
   password: process.env.DB_PASSWORD || "root",
   port: process.env.DB_PORT || 3307,
-  database: "myapp",
+  // database: "myapp",
 };
 
 const dbName = process.env.DB_NAME || "ecommerce_db";
