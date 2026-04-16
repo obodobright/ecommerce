@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -18,14 +18,12 @@
     <!-- Need to learn how to centralized all naviagtion and footer to reduce constant repettion -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="../index.html">
-          <i class="bi bi-shop"></i> Ecommerce Admin
-        </a>
+        <a class="navbar-brand" href="../index.html"> <i class="bi bi-shop"></i> Deo Essentials </a>
         <div class="ms-auto">
           <span class="navbar-text me-3" id="adminName"></span>
-          <a class="btn btn-outline-light btn-sm" href="../index.html">
+          <div id="logoutBtn" class="btn btn-outline-light btn-sm">
             <i class="bi bi-box-arrow-right"></i> Logout
-          </a>
+          </div>
         </div>
       </div>
     </nav>
@@ -162,8 +160,8 @@
                                 <td>${
                                   order.shipping_name || order.customer_name || "N/A"
                                 }<br><small class="text-muted">${
-                  order.shipping_email || order.customer_email || ""
-                }</small></td>
+                                  order.shipping_email || order.customer_email || ""
+                                }</small></td>
                                 <td>${totalItems} item(s)</td>
                                 <td>${new Date(order.created_at).toLocaleString()}</td>
                                 <td>${formatPrice(order.total)}</td>
@@ -224,14 +222,14 @@
                             <h6>Order Information</h6>
                             <p><strong>Order ID:</strong> #${order.id}</p>
                             <p><strong>Date:</strong> ${new Date(
-                              order.created_at
+                              order.created_at,
                             ).toLocaleString()}</p>
                             <p><strong>Status:</strong> <span class="badge bg-${
                               order.status === "pending"
                                 ? "warning"
                                 : order.status === "delivered"
-                                ? "success"
-                                : "info"
+                                  ? "success"
+                                  : "info"
                             }">${order.status}</span></p>
                             <p><strong>Payment Method:</strong> ${
                               order.payment_method === "cod"
@@ -245,8 +243,8 @@
                                 ${order.shipping_name}<br>
                                 ${order.shipping_address}<br>
                                 ${order.shipping_city}, ${order.shipping_state} ${
-            order.shipping_zip
-          }<br>
+                                  order.shipping_zip
+                                }<br>
                                 Phone: ${order.shipping_phone}<br>
                                 Email: ${order.shipping_email}
                             </p>
@@ -273,7 +271,7 @@
                                     <td>${formatPrice(item.price)}</td>
                                     <td>${formatPrice(item.price * item.quantity)}</td>
                                 </tr>
-                            `
+                            `,
                               )
                               .join("")}
                         </tbody>
@@ -313,6 +311,17 @@
           await loadOrders();
         }
       }
+
+      setTimeout(() => {
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            api.auth.logout();
+            console.log("LOGOUT BUTTON CALLED");
+            window.location.reload();
+          });
+        }
+      }, 50);
 
       document.addEventListener("DOMContentLoaded", loadOrders);
     </script>

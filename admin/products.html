@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,14 +17,12 @@
   <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="../index.html">
-          <i class="bi bi-shop"></i> Ecommerce Admin
-        </a>
+        <a class="navbar-brand" href="../index.html"> <i class="bi bi-shop"></i> Deo Essentials </a>
         <div class="ms-auto">
           <span class="navbar-text me-3" id="adminName"></span>
-          <a class="btn btn-outline-light btn-sm" href="../index.html">
+          <div id="logoutBtn" class="btn btn-outline-light btn-sm">
             <i class="bi bi-box-arrow-right"></i> Logout
-          </a>
+          </div>
         </div>
       </div>
     </nav>
@@ -184,8 +182,8 @@
                                 <td><img src="${
                                   product.image || "https://via.placeholder.com/50x50"
                                 }" alt="${
-                  product.name
-                }" style="width: 50px; height: 50px; object-fit: cover;"></td>
+                                  product.name
+                                }" style="width: 50px; height: 50px; object-fit: cover;"></td>
                                 <td>${product.name}</td>
                                 <td><span class="badge bg-secondary">${product.category}</span></td>
                                 <td>${formatPrice(product.price)}</td>
@@ -274,6 +272,17 @@
           alert(error.message || "Failed to save product");
         }
       }
+
+      setTimeout(() => {
+        const logoutBtn = document.getElementById("logoutBtn");
+        if (logoutBtn) {
+          logoutBtn.addEventListener("click", () => {
+            api.auth.logout();
+            console.log("LOGOUT BUTTON CALLED");
+            window.location.reload();
+          });
+        }
+      }, 50);
 
       async function deleteProduct(productId) {
         if (!confirm("Are you sure you want to delete this product?")) {
